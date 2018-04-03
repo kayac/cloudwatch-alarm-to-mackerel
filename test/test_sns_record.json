@@ -1,0 +1,31 @@
+{
+  "Records": [
+    {
+      "EventVersion": "1.0",
+      "EventSubscriptionArn": "arn:aws:sns:EXAMPLE",
+      "EventSource": "aws:sns",
+      "Sns": {
+        "SignatureVersion": "1",
+        "Timestamp": "1970-01-01T00:00:00.000Z",
+        "Signature": "EXAMPLE",
+        "SigningCertUrl": "EXAMPLE",
+        "MessageId": "95df01b4-ee98-5cb9-9903-4c221d41eb5e",
+        "Message": "{\"AlarmName\":\"mytest_mycron_FailedInvocations\",\"AlarmDescription\":\"test\",\"AWSAccountId\":\"***\",\"NewStateValue\":\"ALARM\",\"NewStateReason\":\"ThresholdCrossed:nodatapointswerereceivedfor1periodand1missingdatapointwastreatedas[NonBreaching].\",\"StateChangeTime\":\"2018-02-16T08:42:33.109+0000\",\"Region\":\"AsiaPacific(Tokyo)\",\"OldStateValue\":\"OK\",\"Trigger\":{\"MetricName\":\"FailedInvocations\",\"Namespace\":\"AWS/Events\",\"StatisticType\":\"Statistic\",\"statistic\":\"sum\",\"unit\":null,\"dimensions\":[{\"name\":\"rulename\",\"value\":\"mycron\"}],\"period\":60,\"evaluationperiods\":1,\"comparisonoperator\":\"greaterthanorequaltothreshold\",\"threshold\":0,\"treatmissingdata\":\"-treatmissingdata:nonbreaching\",\"evaluatelowsamplecountpercentile\":\"\"}}",
+        "messageattributes": {
+          "test": {
+            "type": "string",
+            "value": "teststring"
+          },
+          "testbinary": {
+            "type": "binary",
+            "value": "testbinary"
+          }
+        },
+        "type": "notification",
+        "unsubscribeurl": "example",
+        "topicarn": "arn:aws:sns:example",
+        "subject": "testinvoke"
+      }
+    }
+  ]
+}
