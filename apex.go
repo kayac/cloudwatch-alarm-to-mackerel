@@ -5,6 +5,7 @@ package cwfi2mkr
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -15,8 +16,8 @@ import (
 	"strings"
 	"time"
 
-	apex "github.com/apex/go-apex"
 	"github.com/apex/go-apex/sns"
+	"github.com/aws/aws-lambda-go/lambda"
 )
 
 const (
@@ -138,7 +139,7 @@ func run() error {
 		return err
 	}
 
-	sns.HandleFunc(func(event *sns.Event, ctx *apex.Context) error {
+	handler := func(ctx context.Context, event *sns.Event) error {
 		reps := reports{
 			Reports: make([]report, 0, len(event.Records)),
 		}
@@ -175,7 +176,9 @@ func run() error {
 		}
 
 		return postChecksReport(apiKey, reps)
-	})
+	}
+
+	lambda.Start(handler)
 
 	return nil
 }
