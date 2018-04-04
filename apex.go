@@ -1,7 +1,7 @@
 /*
-Lambda function to alert the Cloudwatch Events failed invocations to mackerel.
+Lambda function to alert the Cloudwatch Alarm to mackerel.
 */
-package cwfi2mkr
+package cwa2mkr
 
 import (
 	"bytes"
@@ -22,7 +22,7 @@ import (
 
 const (
 	checkReportEndpoint = "https://api.mackerelio.com/api/v0/monitoring/checks/report"
-	reportMsgFmt        = "%s status is '%s', reason: %s, alarm_description: %s, state_change_time: %s"
+	reportMsgFmt        = "%s status is '%s', reason: %s, alarm_description: %s, state_change_time: %s, metrics: %s, namespace: %s"
 
 	statusOK       = "OK"
 	statusWarning  = "WARNING"
@@ -110,11 +110,17 @@ type source struct {
 // }
 //
 type snsMessage struct {
-	AlarmName        string `json:"AlarmName"`
-	AlarmDescription string `json:"AlarmDescription"`
-	NewStateValue    string `json:"NewStateValue"`
-	NewStateReason   string `json:"NewStateReason"`
-	StateChangeTime  string `json:"StateChangeTime"`
+	AlarmName        string  `json:"AlarmName"`
+	AlarmDescription string  `json:"AlarmDescription"`
+	NewStateValue    string  `json:"NewStateValue"`
+	NewStateReason   string  `json:"NewStateReason"`
+	StateChangeTime  string  `json:"StateChangeTime"`
+	Trigger          trigger `json:"Trigger"`
+}
+
+type trigger struct {
+	MetricName string `json:"MetricName"`
+	Namespace  string `json:"NameSpace"`
 }
 
 func (m snsMessage) toMackerelStatus() string {
@@ -170,6 +176,8 @@ func run() error {
 					msg.NewStateReason,
 					msg.AlarmDescription,
 					msg.StateChangeTime,
+					msg.Trigger.MetricName,
+					msg.Trigger.Namespace,
 				),
 				OccurredAt: time.Now().Unix(),
 			})
