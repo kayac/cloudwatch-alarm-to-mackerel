@@ -223,7 +223,7 @@ func postChecksReport(apiKey string, reps reports) error {
 	}
 	defer resp.Body.Close()
 
-	if status := resp.StatusCode; status > 399 {
+	if status := resp.StatusCode; status >= 400 {
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
 			return fmt.Errorf("failed to read response body: status code %d %s", status, err)
