@@ -1,0 +1,13 @@
+{
+  "name": "your project name",
+  "description": "alert cloudwatch events failed invocation to mackerel",
+  "runtime": "go1.x",
+  "memory": 128,
+  "timeout": 60,
+  "handler": "main",
+  "role": "arn:aws:iam::<your account id>:role/<your lambda role>",
+  "environment": {
+    "HOST_ID": "mackerel host id",
+    "MACKEREL_APIKEY": "your MACKEREL_APIKEY"
+  }
+}
