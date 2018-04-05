@@ -1,3 +1,16 @@
+# Overview
+
+```
+ __________________      _____      _____________
+|                  |    |     |    |             |
+| cloudwatch alarm | => | SNS | => | This Lambda | => [ Mackerel ]
+|__________________|    |_____|    |_____________|
+
+```
+
+`cloudwatch-alarm-to-mackerel` function propagates Cloudwatch Alarm alerts to your mackerel.
+And we have to use AWS Simple Notification Service to make the lambda work.
+
 # Usage
 
 ## git clone
@@ -34,3 +47,7 @@ You should deploy with '--set' option if you would avoid to include `MACKEREL_AP
 ```
 apex deploy --set MACKEREL_APIKEY=xxx-xxxxxx-xxxxxx
 ```
+
+# How to alert as CRITICAL on mackerel
+
+We can raise a critical alert on mackerel when to set `CRITICAL` to prefix of Cloudwatch Alarm description.
