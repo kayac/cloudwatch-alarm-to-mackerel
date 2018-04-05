@@ -28,3 +28,9 @@ MACKEREL_APIKEY | mackerel apikey
 apex deploy -D
 apex deploy
 ```
+
+You should deploy with '--set' option if you would avoid to include `MACKEREL_APIKEY` into repo.
+
+```
+apex deploy --set MACKEREL_APIKEY=xxx-xxxxxx-xxxxxx
+```
