@@ -46,11 +46,11 @@ const (
 //     }
 //   ]
 // }
-type reports struct {
-	Reports []report `json:"reports"`
+type Reports struct {
+	Reports []Report `json:"reports"`
 }
 
-type report struct {
+type Report struct {
 	// source struct reference
 	Source source `json:"source"`
 
@@ -146,8 +146,8 @@ func run() error {
 	}
 
 	handler := func(ctx context.Context, event *sns.Event) error {
-		reps := reports{
-			Reports: make([]report, 0, len(event.Records)),
+		reps := Reports{
+			Reports: make([]Report, 0, len(event.Records)),
 		}
 
 		for _, record := range event.Records {
@@ -163,7 +163,7 @@ func run() error {
 				continue
 			}
 
-			reps.Reports = append(reps.Reports, report{
+			reps.Reports = append(reps.Reports, Report{
 				Source: source{
 					HostID: hostID,
 					Type:   "host",
@@ -183,7 +183,7 @@ func run() error {
 			})
 		}
 
-		return postChecksReport(apiKey, reps)
+		return PostChecksReport(apiKey, reps)
 	}
 
 	lambda.Start(handler)
@@ -205,7 +205,7 @@ func parseEnvVars() (apiKey, hostID string, err error) {
 	return
 }
 
-func postChecksReport(apiKey string, reps reports) error {
+func PostChecksReport(apiKey string, reps Reports) error {
 	body := new(bytes.Buffer)
 	if err := json.NewEncoder(body).Encode(reps); err != nil {
 		return err
