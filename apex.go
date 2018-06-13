@@ -52,7 +52,7 @@ type Reports struct {
 
 type Report struct {
 	// source struct reference
-	Source source `json:"source"`
+	Source Source `json:"source"`
 
 	// monitoring name
 	Name string `json:"name"`
@@ -70,7 +70,7 @@ type Report struct {
 	NotificationInterval int `json:"notificationInterval,omitempty"`
 }
 
-type source struct {
+type Source struct {
 	// constant string "host"
 	Type string `json:"type"`
 
@@ -164,7 +164,7 @@ func run() error {
 			}
 
 			reps.Reports = append(reps.Reports, Report{
-				Source: source{
+				Source: Source{
 					HostID: hostID,
 					Type:   "host",
 				},
