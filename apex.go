@@ -24,9 +24,9 @@ const (
 	checkReportEndpoint = "https://api.mackerelio.com/api/v0/monitoring/checks/report"
 	reportMsgFmt        = "%s status is '%s', reason: %s, alarm_description: %s, state_change_time: %s, metrics: %s, namespace: %s"
 
-	statusOK       = "OK"
-	statusWarning  = "WARNING"
-	statusCritical = "CRITICAL"
+	StatusOK       = "OK"
+	StatusWarning  = "WARNING"
+	StatusCritical = "CRITICAL"
 )
 
 // https://mackerel.io/ja/api-docs/entry/check-monitoring
@@ -124,13 +124,13 @@ type trigger struct {
 }
 
 func (m snsMessage) toMackerelStatus() string {
-	if m.NewStateValue == statusOK {
-		return statusOK
+	if m.NewStateValue == StatusOK {
+		return StatusOK
 	}
 	if strings.HasPrefix(m.AlarmDescription, "CRITICAL") {
-		return statusCritical
+		return StatusCritical
 	}
-	return statusWarning
+	return StatusWarning
 }
 
 func ApexRun() {
