@@ -51,3 +51,40 @@ apex deploy --set MACKEREL_APIKEY=xxx-xxxxxx-xxxxxx
 # How to alert as CRITICAL on mackerel
 
 We can raise a critical alert on mackerel when to set `CRITICAL` to prefix of Cloudwatch Alarm description.
+
+# Use post checks report
+
+```
+package main
+
+import (
+	"log"
+	"time"
+
+	"github.com/kayac/cloudwatch-alarm-to-mackerel"
+)
+
+func main() {
+	now := time.Now().Unix()
+	apiKey = "Your mackerel api key"
+
+	reports := cwa2mkr.Reports{
+		Reports: []cwa2mkr.Report{
+			cwa2mkr.Report{
+				Source: cwa2mkr.Source{
+					Type:   "host",
+					HostID: "host id",
+				},
+				Name:       "test alarm",
+				Status:     cwa2mkr.StatusWarning,
+				Message:    "this is a test",
+				OccurredAt: now,
+			},
+		},
+	}
+
+	if err := cwa2mkr.PostChecksReport(apiKey, reports); err != nil {
+		log.Println(err)
+	}
+}
+```
