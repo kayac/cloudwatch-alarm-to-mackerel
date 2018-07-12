@@ -24,9 +24,9 @@ const (
 	checkReportEndpoint = "https://api.mackerelio.com/api/v0/monitoring/checks/report"
 	reportMsgFmt        = "%s status is '%s', reason: %s, alarm_description: %s, state_change_time: %s, metrics: %s, namespace: %s"
 
-	statusOK       = "OK"
-	statusWarning  = "WARNING"
-	statusCritical = "CRITICAL"
+	StatusOK       = "OK"
+	StatusWarning  = "WARNING"
+	StatusCritical = "CRITICAL"
 )
 
 // https://mackerel.io/ja/api-docs/entry/check-monitoring
@@ -46,13 +46,13 @@ const (
 //     }
 //   ]
 // }
-type reports struct {
-	Reports []report `json:"reports"`
+type Reports struct {
+	Reports []Report `json:"reports"`
 }
 
-type report struct {
+type Report struct {
 	// source struct reference
-	Source source `json:"source"`
+	Source Source `json:"source"`
 
 	// monitoring name
 	Name string `json:"name"`
@@ -70,7 +70,7 @@ type report struct {
 	NotificationInterval int `json:"notificationInterval,omitempty"`
 }
 
-type source struct {
+type Source struct {
 	// constant string "host"
 	Type string `json:"type"`
 
@@ -124,13 +124,13 @@ type trigger struct {
 }
 
 func (m snsMessage) toMackerelStatus() string {
-	if m.NewStateValue == statusOK {
-		return statusOK
+	if m.NewStateValue == StatusOK {
+		return StatusOK
 	}
 	if strings.HasPrefix(m.AlarmDescription, "CRITICAL") {
-		return statusCritical
+		return StatusCritical
 	}
-	return statusWarning
+	return StatusWarning
 }
 
 func ApexRun() {
@@ -146,8 +146,8 @@ func run() error {
 	}
 
 	handler := func(ctx context.Context, event *sns.Event) error {
-		reps := reports{
-			Reports: make([]report, 0, len(event.Records)),
+		reps := Reports{
+			Reports: make([]Report, 0, len(event.Records)),
 		}
 
 		for _, record := range event.Records {
@@ -163,8 +163,8 @@ func run() error {
 				continue
 			}
 
-			reps.Reports = append(reps.Reports, report{
-				Source: source{
+			reps.Reports = append(reps.Reports, Report{
+				Source: Source{
 					HostID: hostID,
 					Type:   "host",
 				},
@@ -183,7 +183,7 @@ func run() error {
 			})
 		}
 
-		return postChecksReport(apiKey, reps)
+		return PostChecksReport(apiKey, reps)
 	}
 
 	lambda.Start(handler)
@@ -205,7 +205,7 @@ func parseEnvVars() (apiKey, hostID string, err error) {
 	return
 }
 
-func postChecksReport(apiKey string, reps reports) error {
+func PostChecksReport(apiKey string, reps Reports) error {
 	body := new(bytes.Buffer)
 	if err := json.NewEncoder(body).Encode(reps); err != nil {
 		return err
